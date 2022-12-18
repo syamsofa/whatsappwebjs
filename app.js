@@ -1,11 +1,10 @@
 
 const express = require("express")
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const socketIO = require("socket.io")
 const qrcode = require("qrcode")
 const http = require("http")
-// const client = new Client();
-
+const fileUpload = require('express-fileupload')
 
 const fs = require("fs");
 const { response } = require("express");
@@ -14,8 +13,11 @@ const server = http.createServer(app)
 const io = socketIO(server)
 
 app.use(express.json())
-
 app.use(express.urlencoded({ extended: true }))
+app.use(fileUpload({
+    debug: true
+}))
+
 app.get('/', (req, res) => {
     res.sendFile('index.html', { root: __dirname })
 })
@@ -59,7 +61,7 @@ io.on('connection', function (socket) {
     client.on('authenticated', () => {
         socket.emit('authenticated', 'Client is ready')
         socket.emit('message', 'Client is ready')
-   
+
         console.log('AUTHENTICATED OK deh');
     });
 
@@ -71,6 +73,32 @@ app.post('/send-message', (req, res) => {
     const number = req.body.number;
     const message = req.body.message;
     client.sendMessage(number, message).then(response => {
+        res.status(200).json({
+            status: true,
+            response: response
+        })
+    }).catch(err => {
+        res.status(500).json({
+            status: false,
+            response: err
+        })
+
+    })
+
+})
+
+app.post('/send-media', (req, res) => {
+    const number = req.body.number;
+    const caption = req.body.caption;
+    // const media = MessageMedia.fromFilePath('./singkongkeju.jpg')
+
+    const file = req.files.file
+
+    const media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name)
+    // console.log(file)
+
+    // return
+    client.sendMessage(number, media, { caption: caption }).then(response => {
         res.status(200).json({
             status: true,
             response: response
