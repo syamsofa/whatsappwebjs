@@ -95,7 +95,7 @@ app.post('/send-media', (req, res) => {
     const file = req.files.file
 
     const media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name)
-    // console.log(file)
+    console.log(file)
 
     // return
     client.sendMessage(number, media, { caption: caption }).then(response => {
