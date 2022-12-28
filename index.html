@@ -8,7 +8,18 @@
 <body>
     <div id="app">
         <img src="" id="qrcode">
-        <h3>JOSS</h3>
+        <h3>TULISKAN PESAN ANDA</h3>
+        <p>
+            <textarea id="pesan_anda"></textarea>
+        </p>
+        <h3><button id="send_multi">SEND MULTI NUMBER (MESSAGE TEXT)</button></h3>
+        <p>
+            <textarea id="url_picture"></textarea>
+        </p>
+        <input type="file" id="picture">
+        <p><button id='send_media_url'>Kirim pesan dengan gambar dari url</button></p>
+        <p><button id='send_media'>Kirim pesan dengan gambar lokal</button></p>
+        <p><button id='send_media_upload'>Kirim pesan dengan gambar uploadan</button></p>
         <ul class="logs"></ul>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js"
@@ -18,6 +29,15 @@
         integrity="sha512-HTENHrkQ/P0NGDFd5nk6ibVtCkcM7jhr2c7GyvXp5O+4X6O5cQO9AhqFzM+MdeBivsX7Hoys2J7pp2wdgMpCvw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!-- <script>
+        $("#picture").change(function () {
+            alert(22)
+            const fileupload = $("#picture").prop('files')[0];
+
+            console.log(fileupload)
+        })
+
+    </script> -->
     <script>
         $(document).ready(function () {
             var socket = io.connect('http://localhost:8000', { path: '/socket.io' })
@@ -40,6 +60,149 @@
 
         })
     </script>
+
+    <script>
+        $("#send_multi").click(function () {
+
+            var form_data = new FormData();
+            const fileupload = $("#picture").prop('files')[0];
+
+            console.log(fileupload)
+
+            form_data.append('file', fileupload);
+            form_data.append('number', "");
+            form_data.append('caption', "KEREN NIH");
+
+            for (y = 0; y < 200; y++) {
+                const d = new Date();
+                let time = d.getTime();
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: 'http://localhost:8000/send-message',
+                    dataType: 'json',
+                    data: {
+                        number: "6289510279475@c.us",
+                        message: "Pesan =  " + $("#pesan_anda").val()
+                    },
+                    success: function (output) {
+                        // console.log(output);
+
+                    },
+
+                    error: function (e) {
+                        // console.log(e.responseText);
+
+
+                    }
+                });
+            }
+        })
+    </script>
+
+    <script>
+        $("#send_media").click(function () {
+
+
+            for (y = 0; y < 10; y++) {
+                const d = new Date();
+                let time = d.getTime();
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: 'http://localhost:8000/send-media',
+                    dataType: 'json',
+                    data: {
+                        number: "6289510279475@c.us",
+                        caption: "Pesan =  " + $("#pesan_anda").val()
+                    },
+                    success: function (output) {
+                        // console.log(output);
+
+                    },
+
+                    error: function (e) {
+                        // console.log(e.responseText);
+
+
+                    }
+                });
+            }
+        })
+    </script>
+    <script>
+        $("#send_media_upload").click(function () {
+
+            // var files = $("#picture")[0].files[0];
+            var data;
+
+            data = new FormData();
+            data.append('file', $('#picture')[0].files[0]);
+            data.append('number', '6289510279475@c.us');
+            data.append('caption', 'sukses ya');
+
+            for (y = 0; y < 10; y++) {
+                const d = new Date();
+                let time = d.getTime();
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    async: false,
+                    url: 'http://localhost:8000/send-media-upload',
+                    dataType: 'json',
+                    data: data,
+                    success: function (output) {
+                        // console.log(output);
+
+                    },
+
+                    error: function (e) {
+                        // console.log(e.responseText);
+
+
+                    }
+                });
+            }
+        })
+    </script>
+    <script>
+        $("#send_media_url").click(function () {
+
+            // var files = $("#picture")[0].files[0];
+            var data;
+
+            data = new FormData();
+            data.append('file', $('#picture')[0].files[0]);
+            data.append('number', '6289510279475@c.us');
+            data.append('caption', 'sukses ya');
+
+            for (y = 0; y < 10; y++) {
+                const d = new Date();
+                let time = d.getTime();
+                $.ajax({
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    async: false,
+                    url: 'http://localhost:8000/send-media-url',
+                    dataType: 'json',
+                    data: data,
+                    success: function (output) {
+                        // console.log(output);
+
+                    },
+
+                    error: function (e) {
+                        // console.log(e.responseText);
+
+
+                    }
+                });
+            }
+        })
+    </script>
+
 </body>
 
 </html>

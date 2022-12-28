@@ -1,6 +1,6 @@
 
-const express = require("express")
 const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
+const express = require("express")
 const socketIO = require("socket.io")
 const qrcode = require("qrcode")
 const http = require("http")
@@ -26,7 +26,7 @@ let sessionCfg
 
 const client = new Client({
     authStrategy: new LocalAuth({
-        clientId: "client-one-s"
+        clientId: "client-one-sos"
     }),
     puppeteer: {
         headless: true,
@@ -88,14 +88,38 @@ app.post('/send-message', (req, res) => {
 })
 
 app.post('/send-media', (req, res) => {
+
     const number = req.body.number;
     const caption = req.body.caption;
-    // const media = MessageMedia.fromFilePath('./singkongkeju.jpg')
+    const media = MessageMedia.fromFilePath('./singkongkeju.jpg')
+
+    // const file = req.files.file
+
+    // con st media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name)
+    // console.log(file)
+
+    // return
+    client.sendMessage(number, media, { caption: caption }).then(response => {
+        res.status(200).json({
+            status: true,
+            response: response
+        })
+    }).catch(err => {
+        res.status(500).json({
+            status: false,
+            response: err
+        })
+
+    })
+
+})
+app.post('/send-media-upload', (req, res) => {
+    const number = req.body.number;
+    const caption = req.body.caption;
 
     const file = req.files.file
 
     const media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name)
-    console.log(file)
 
     // return
     client.sendMessage(number, media, { caption: caption }).then(response => {
