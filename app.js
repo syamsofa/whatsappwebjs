@@ -113,6 +113,32 @@ app.post('/send-media', (req, res) => {
     })
 
 })
+app.post('/send-media-url', async (req, res) => {
+
+    const number = req.body.number;
+    const caption = req.body.caption;
+    const media = await MessageMedia.fromUrl('https://rumahquranblora.org/wp-content/uploads/2022/02/cropped-cropped-Logo-RQAB.png')
+
+    // const file = req.files.file
+
+    // con st media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name)
+    console.log(media)
+
+    // return
+    client.sendMessage(number, media, { caption: caption }).then(response => {
+        res.status(200).json({
+            status: true,
+            response: response
+        })
+    }).catch(err => {
+        res.status(500).json({
+            status: false,
+            response: err
+        })
+
+    })
+
+})
 app.post('/send-media-upload', (req, res) => {
     const number = req.body.number;
     const caption = req.body.caption;

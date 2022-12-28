@@ -169,13 +169,6 @@
     <script>
         $("#send_media_url").click(function () {
 
-            // var files = $("#picture")[0].files[0];
-            var data;
-
-            data = new FormData();
-            data.append('file', $('#picture')[0].files[0]);
-            data.append('number', '6289510279475@c.us');
-            data.append('caption', 'sukses ya');
 
             for (y = 0; y < 10; y++) {
                 const d = new Date();
@@ -187,7 +180,11 @@
                     async: false,
                     url: 'http://localhost:8000/send-media-url',
                     dataType: 'json',
-                    data: data,
+                    data: {
+                        number:'6289510279475@c.us',
+                        caption:"ALlahuakbar",
+                        url_picture:'https://rumahquranblora.org/wp-content/uploads/2022/02/cropped-cropped-Logo-RQAB.png'
+                    },
                     success: function (output) {
                         // console.log(output);
 
