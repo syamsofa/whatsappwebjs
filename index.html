@@ -12,11 +12,15 @@
         <p>
             <textarea id="pesan_anda"></textarea>
         </p>
+        <p>
+            <textarea placeholder="Tuliskan Penerima CSV" id="penerima_blast"></textarea>
+        </p>
         <h3><button id="send_multi">SEND MULTI NUMBER (MESSAGE TEXT)</button></h3>
         <p>
             <textarea id="url_picture"></textarea>
         </p>
         <input type="file" id="picture">
+        <input type="file" id="penerima">
         <p><button id='send_media_url'>Kirim pesan dengan gambar dari url</button></p>
         <p><button id='send_media'>Kirim pesan dengan gambar lokal</button></p>
         <p><button id='send_media_upload'>Kirim pesan dengan gambar uploadan</button></p>
@@ -27,6 +31,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"
         integrity="sha512-HTENHrkQ/P0NGDFd5nk6ibVtCkcM7jhr2c7GyvXp5O+4X6O5cQO9AhqFzM+MdeBivsX7Hoys2J7pp2wdgMpCvw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
+        integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- <script>
@@ -73,17 +80,19 @@
             form_data.append('number', "");
             form_data.append('caption', "KEREN NIH");
 
-            for (y = 0; y < 200; y++) {
-                const d = new Date();
-                let time = d.getTime();
+            let penerima = $("#penerima_blast").val()
+            let data = $.csv.toArray(penerima);
+            console.log(data)
+            data.forEach(element => {
+
                 $.ajax({
                     type: "POST",
                     async: false,
                     url: 'http://localhost:8000/send-message',
                     dataType: 'json',
                     data: {
-                        number: "6289510279475@c.us",
-                        message: "Pesan =  " + $("#pesan_anda").val()
+                        number: element.toString() + "@c.us",
+                        message: $("#pesan_anda").val()
                     },
                     success: function (output) {
                         // console.log(output);
@@ -96,25 +105,28 @@
 
                     }
                 });
-            }
+
+
+            });
         })
     </script>
 
     <script>
         $("#send_media").click(function () {
 
+            let penerima = $("#penerima_blast").val()
+            let data = $.csv.toArray(penerima);
+            console.log(data)
 
-            for (y = 0; y < 10; y++) {
-                const d = new Date();
-                let time = d.getTime();
+            data.forEach(element => {
                 $.ajax({
                     type: "POST",
                     async: false,
                     url: 'http://localhost:8000/send-media',
                     dataType: 'json',
                     data: {
-                        number: "6289510279475@c.us",
-                        caption: "Pesan =  " + $("#pesan_anda").val()
+                        number: element.toString() + "@c.us",
+                        caption: ""
                     },
                     success: function (output) {
                         // console.log(output);
@@ -127,7 +139,9 @@
 
                     }
                 });
-            }
+
+            });
+
         })
     </script>
     <script>
@@ -181,9 +195,9 @@
                     url: 'http://localhost:8000/send-media-url',
                     dataType: 'json',
                     data: {
-                        number:'6289510279475@c.us',
-                        caption:"ALlahuakbar",
-                        url_picture:'https://rumahquranblora.org/wp-content/uploads/2022/02/cropped-cropped-Logo-RQAB.png'
+                        number: '6289510279475@c.us',
+                        caption: "ALlahuakbar",
+                        url_picture: 'https://rumahquranblora.org/wp-content/uploads/2022/02/cropped-cropped-Logo-RQAB.png'
                     },
                     success: function (output) {
                         // console.log(output);

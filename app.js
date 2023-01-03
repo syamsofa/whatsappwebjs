@@ -91,7 +91,7 @@ app.post('/send-media', (req, res) => {
 
     const number = req.body.number;
     const caption = req.body.caption;
-    const media = MessageMedia.fromFilePath('./singkongkeju.jpg')
+    const media = MessageMedia.fromFilePath('./kajian.jpeg')
 
     // const file = req.files.file
 
