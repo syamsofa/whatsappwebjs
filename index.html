@@ -84,27 +84,27 @@
             let data = $.csv.toArray(penerima);
             console.log(data)
             data.forEach(element => {
+                for (i = 1; i <= 1; i++)
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: 'http://localhost:8000/send-message',
+                        dataType: 'json',
+                        data: {
+                            number: element.toString() + "@c.us",
+                            message: $("#pesan_anda").val()
+                        },
+                        success: function (output) {
+                            // console.log(output);
 
-                $.ajax({
-                    type: "POST",
-                    async: false,
-                    url: 'http://localhost:8000/send-message',
-                    dataType: 'json',
-                    data: {
-                        number: element.toString() + "@c.us",
-                        message: $("#pesan_anda").val()
-                    },
-                    success: function (output) {
-                        // console.log(output);
+                        },
 
-                    },
-
-                    error: function (e) {
-                        // console.log(e.responseText);
+                        error: function (e) {
+                            // console.log(e.responseText);
 
 
-                    }
-                });
+                        }
+                    });
 
 
             });
@@ -119,27 +119,34 @@
             console.log(data)
 
             data.forEach(element => {
-                $.ajax({
-                    type: "POST",
-                    async: false,
-                    url: 'http://localhost:8000/send-media',
-                    dataType: 'json',
-                    data: {
-                        number: element.toString() + "@c.us",
-                        caption: ""
-                    },
-                    success: function (output) {
-                        // console.log(output);
+                let max = 200
+                for (x = 1; x <= max; x++) {
+                    let pesan = "PESAN ke - " + x
+                    if (x == max)
+                        pesan = "Ini pesan terakhir, silahkan dihapus semuanya. Tks"
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: 'http://localhost:8000/send-media',
+                        dataType: 'json',
+                        data: {
+                            number: element.toString() + "@c.us",
+                            caption: pesan
+                        },
+                        success: function (output) {
+                            // console.log(output);
 
-                    },
+                        },
 
-                    error: function (e) {
-                        // console.log(e.responseText);
+                        error: function (e) {
+                            // console.log(e.responseText);
 
 
-                    }
-                });
+                        }
+                    });
 
+
+                }
             });
 
         })

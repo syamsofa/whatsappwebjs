@@ -72,6 +72,8 @@ io.on('connection', function (socket) {
 app.post('/send-message', (req, res) => {
     const number = req.body.number;
     const message = req.body.message;
+
+
     client.sendMessage(number, message).then(response => {
         res.status(200).json({
             status: true,
@@ -91,7 +93,7 @@ app.post('/send-media', (req, res) => {
 
     const number = req.body.number;
     const caption = req.body.caption;
-    const media = MessageMedia.fromFilePath('./kajian.jpeg')
+    const media = MessageMedia.fromFilePath('./gambar.png')
 
     // const file = req.files.file
 
